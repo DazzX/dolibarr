@@ -44,7 +44,7 @@ $langs->loadLangs(array("companies","other","ticket"));
 
 // Get parameters
 $track_id = GETPOST('track_id', 'alpha');
-$action = GETPOST('action', 'alpha', 3);
+$action = GETPOST('action', 'aZ09');
 $email = GETPOST('email', 'alpha');
 
 if (GETPOST('btn_view_ticket_list')) {
@@ -121,8 +121,8 @@ if ($action == "view_ticketlist") {
         }
     }
 
-    if ($error) {
-        setEventMessage($object->errors, 'errors');
+    if ($error || $errors) {
+        setEventMessages($object->error, $object->errors, 'errors');
         $action = '';
     }
 }
@@ -182,7 +182,7 @@ if ($action == "view_ticketlist")
         // fetch optionals attributes and labels
         $extrafields = new ExtraFields($db);
         $extralabels = $extrafields->fetch_name_optionals_label('ticket');
-        $search_array_options = $extrafields->getOptionalsFromPost($extralabels, '', 'search_');
+        $search_array_options = $extrafields->getOptionalsFromPost('ticket', '', 'search_');
 
         $filter = array();
         $param = '';
@@ -471,7 +471,7 @@ if ($action == "view_ticketlist")
 
                 if (!empty($arrayfields['category.code']['checked'])) {
                     print '<td class="liste_titre">';
-                    $formTicket->selectCategoriesTickets($search_category, 'search_category', '', 2, 1, 1);
+                    $formTicket->selectGroupTickets($search_category, 'search_category', '', 2, 1, 1);
                     print '</td>';
                 }
 
@@ -506,7 +506,7 @@ if ($action == "view_ticketlist")
                     }
                 }
 
-                print '<td class="liste_titre nowraponall" align="right">';
+                print '<td class="liste_titre nowraponall right">';
                 print '<input type="image" class="liste_titre" name="button_search" src="' . img_picto($langs->trans("Search"), 'search.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("Search")) . '" title="' . dol_escape_htmltag($langs->trans("Search")) . '">';
                 print '<input type="image" class="liste_titre" name="button_removefilter" src="' . img_picto($langs->trans("Search"), 'searchclear.png', '', '', 1) . '" value="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '" title="' . dol_escape_htmltag($langs->trans("RemoveFilter")) . '">';
                 print '</td>';
@@ -519,21 +519,21 @@ if ($action == "view_ticketlist")
                     // Date ticket
                     if (!empty($arrayfields['t.datec']['checked'])) {
                         print '<td>';
-                        print dol_print_date($obj->datec, 'dayhour');
+                        print dol_print_date($db->jdate($obj->datec), 'dayhour');
                         print '</td>';
                     }
 
                     // Date read
                     if (!empty($arrayfields['t.date_read']['checked'])) {
                         print '<td>';
-                        print dol_print_date($obj->date_read, 'dayhour');
+                        print dol_print_date($db->jdate($obj->date_read), 'dayhour');
                         print '</td>';
                     }
 
                     // Date close
                     if (!empty($arrayfields['t.date_close']['checked'])) {
                         print '<td>';
-                        print dol_print_date($obj->date_close, 'dayhour');
+                        print dol_print_date($db->jdate($obj->date_close), 'dayhour');
                         print '</td>';
                     }
 
@@ -616,7 +616,7 @@ if ($action == "view_ticketlist")
                     }
 
                     if (!empty($arrayfields['t.tms']['checked'])) {
-                        print '<td>' . dol_print_date($obj->tms, 'dayhour') . '</td>';
+                        print '<td>' . dol_print_date($db->jdate($obj->tms), 'dayhour') . '</td>';
                     }
 
                     // Extra fields
@@ -664,7 +664,7 @@ if ($action == "view_ticketlist")
         print '<div class="error">Not Allowed<br><a href="' . $_SERVER['PHP_SELF'] . '?track_id=' . $object->dao->track_id . '">' . $langs->trans('Back') . '</a></div>';
     }
 } else {
-    print '<p style="text-align: center">' . $langs->trans("TicketPublicMsgViewLogIn") . '</p>';
+    print '<p class="center">' . $langs->trans("TicketPublicMsgViewLogIn") . '</p>';
 
     print '<div id="form_view_ticket">';
     print '<form method="post" name="form_view_ticketlist"  enctype="multipart/form-data" action="' . $_SERVER['PHP_SELF'] . '">';

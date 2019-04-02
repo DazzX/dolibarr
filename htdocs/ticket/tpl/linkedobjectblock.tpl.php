@@ -1,10 +1,10 @@
 <?php
-/* Copyright (C) 2010-2012 Regis Houssin <regis@dolibarr.fr>
+/* Copyright (C) 2010-2012 Regis Houssin <regis.houssin@inodbox.com>
  * Copyright (C) 2013      Jean-François FERRY <hello@librethic.io>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -32,14 +32,14 @@ $langs = $GLOBALS['langs'];
 $langs->load('ticket');
 $linkedObjectBlock = $GLOBALS['linkedObjectBlock'];
 echo '<br>';
-print_titre($langs->trans('RelatedTickets'));
+print load_fiche_titre($langs->trans('RelatedTickets'));
 ?>
 <table class="noborder" width="100%">
 <tr class="liste_titre">
     <td><?php echo $langs->trans("Subject"); ?></td>
-    <td align="center"><?php echo $langs->trans("DateCreation"); ?></td>
-    <td align="center"><?php echo $langs->trans("Customer"); ?></td>
-    <td align="center"><?php echo $langs->trans("Status"); ?></td>
+    <td class="center"><?php echo $langs->trans("DateCreation"); ?></td>
+    <td class="center"><?php echo $langs->trans("Customer"); ?></td>
+    <td class="center"><?php echo $langs->trans("Status"); ?></td>
 </tr>
 <?php
 foreach ($linkedObjectBlock as $object) {
@@ -50,13 +50,13 @@ foreach ($linkedObjectBlock as $object) {
     <?php echo img_object($langs->trans("ShowTicket"), "ticket") . ' ' . (! empty($object->subject) ? ' '.$object->subject : ''); ?>
         </a>
     </td>
-    <td align="center"><?php echo dol_print_date($object->datec, 'day'); ?></td>
+    <td class="center"><?php echo dol_print_date($object->datec, 'day'); ?></td>
     <?php
     $object->socid = $object->fk_soc;
     $object->fetch_thirdparty();
     ?>
-    <td align="center"><?php echo $object->thirdparty->getNomUrl(1); ?></td>
-    <td align="center"><?php echo $object->getLibstatut(2); ?></td>
+    <td class="center"><?php echo $object->thirdparty->getNomUrl(1); ?></td>
+    <td class="center"><?php echo $object->getLibstatut(2); ?></td>
 </tr>
 <?php } ?>
 </table>
